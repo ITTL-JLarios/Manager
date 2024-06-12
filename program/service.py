@@ -1,14 +1,14 @@
 import os
+from threading import Thread
 
 class Service:
     def __init__(
                 self,
                 base_dir,
                 fps=None,
-                key=None,
+                fernet=None,
                 file_name=None):
         
-        # Service Variables
         '''
         args:
             base_dir: Directory where the service will store or get files
@@ -20,20 +20,20 @@ class Service:
         self.file_name = ( os.path.join(self.base_path, file_name) 
                             if file_name else file_name )
         self.fps = fps
-        self.key = key
+        self.fernet = fernet
 
 
-    def get_path(self):
-        '''
-        return:
-            base_path: The base path for the service out put or input files
-        '''
-        return self.base_path
-    
-
-    def get_file_name(self):
-        '''
-        return:
-            base_path: The Name for the file service out put or input
-        '''
-        return self.file_name
+def threaded(fn):
+    '''
+    args:
+        fn: Function to pass through a decorator
+    return:
+        thread: Thread for the CPU
+        wraper: Wraps the function in another function
+    '''
+    def wraper(*args, **kwargs):
+        thread = Thread(target=fn, args=args, kwargs=kwargs).start()
+        # Return thread
+        return thread
+    # Return wraper
+    return wraper

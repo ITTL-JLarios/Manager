@@ -1,4 +1,4 @@
-from program.service import Service
+from program.service import Service, threaded
 
 from datetime import datetime, timedelta
 from PIL import ImageGrab
@@ -8,7 +8,7 @@ import cv2
 import os
 
 class ScreenRecording( Service ):
-    def __init__(self, base_dir='rec', fps=10, time_lapse=1, elderness=7):
+    def __init__(self, base_dir='rec', fps=20, time_lapse=1, elderness=7):
         '''
         args:
             base_dir: Base directory for input or ouput files
@@ -19,13 +19,6 @@ class ScreenRecording( Service ):
         super().__init__(base_dir, fps)
         self.time_lapsus = time_lapse
         self.elderness = elderness
-
-        while True:
-            try:
-                self.record()
-            except:
-                pass
-            self.delete_old_rec()
 
 
     def record(self):
@@ -94,3 +87,13 @@ class ScreenRecording( Service ):
             # If file is older than {elderness} will be deleted
             if (file_dt < (current_time - timedelta(days=self.elderness))):
                 os.remove(file_location)
+
+
+    @threaded
+    def satart_service(self):
+        while True:
+            try:
+                self.record()
+            except:
+                pass
+            self.delete_old_rec()

