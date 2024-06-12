@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
 from program.service import Service
+
+from datetime import datetime, timedelta
 from PIL import ImageGrab
 import numpy as np
 import imageio

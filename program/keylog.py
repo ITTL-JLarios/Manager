@@ -9,7 +9,7 @@ class KeyLog(Service):
                 self,
                 base_dir='log',
                 key=None,
-                file_name='activity.txt'):
+                file_name='Activities.txt'):
         '''
         args:
             base_dir: Directory where the input or output files will be stored
@@ -31,7 +31,7 @@ class KeyLog(Service):
         '''
         current_time = datetime.now(pytz.timezone('America/Guatemala'))
         
-        with open(self.base_path, 'a+') as file:
+        with open(self.file_name, 'a+') as file:
             # If event is in jump list...
             if event.name in self.jumps:
                 # Join the content in array
