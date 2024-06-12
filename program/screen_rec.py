@@ -8,7 +8,7 @@ import cv2
 import os
 
 class ScreenRecording( Service ):
-    def __init__(self, base_dir='rec', fps=20, time_lapse=1, elderness=7):
+    def __init__(self, base_dir='rec', fps=5, time_lapse=15, elderness=7):
         '''
         args:
             base_dir: Base directory for input or ouput files
@@ -39,9 +39,9 @@ class ScreenRecording( Service ):
         shape = img_np_arr.shape
 
         # Low scale_by_percent implies smaller window
-        scale_by_percent = 95
-        width = int(shape[1] * scale_by_percent / 100)
-        height = int(shape[0] * scale_by_percent / 100)
+        height = shape[0] + (16 - shape[0] % 16) if shape[0] % 16 != 0 else shape[0]
+        width = shape[1] + (16 - shape[1] % 16) if shape[1] % 16 != 0 else shape[1]
+    
         new_dim = (width, height)
 
         # Create a video writer
