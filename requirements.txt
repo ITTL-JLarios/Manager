@@ -1,0 +1,12 @@
+pillow
+numpy
+opencv-python
+pyautogui
+imageio[ffmpeg]
+
+keyboard
+cryptography
+pytz
+
+psutil
+pywin32
