@@ -2,11 +2,10 @@ from program.service import Service, threaded
 
 from datetime import datetime, timedelta
 import numpy as np
-import imageio
 import os
 import cv2
 import mss
-import time
+import asyncio
 
 class ScreenRecording( Service ):
     def __init__(self, base_dir='rec', fps=30, time_lapse=1, elderness=7):
@@ -71,8 +70,8 @@ class ScreenRecording( Service ):
                 os.remove(file_location)
 
 
-    @threaded
-    def satart_service(self):
+    
+    async def satart_service(self):
         while True:
             try:
                 self.record()
