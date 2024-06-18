@@ -8,7 +8,7 @@ import mss
 import asyncio
 
 class ScreenRecording( Service ):
-    def __init__(self, base_dir='rec', fps=30, time_lapse=1, elderness=7):
+    def __init__(self, base_dir='rec', fps=30, time_lapse=15, elderness=7):
         '''
         args:
             base_dir: Base directory for input or ouput files
@@ -34,17 +34,23 @@ class ScreenRecording( Service ):
         init_time = datetime.now()
         end_time = init_time + timedelta(minutes=self.time_lapsus)
         with mss.mss() as sct:
-            monitor = sct.monitors[1]  # Capture the primary monitor
+            monitor = sct.monitors[:]
+            all_monitors = {
+                "left": min(monitor["left"] for monitor in sct.monitors),
+                "top": min(monitor["top"] for monitor in sct.monitors),
+                "width": max(monitor["left"] + monitor["width"] for monitor in sct.monitors) - min(monitor["left"] for monitor in sct.monitors),
+                "height": max(monitor["top"] + monitor["height"] for monitor in sct.monitors) - min(monitor["top"] for monitor in sct.monitors),
+            } # Capture the primary monitor
             fourcc = cv2.VideoWriter_fourcc(*'VP80')  # VP8 codec for .webm format
             out = cv2.VideoWriter(
                 os.path.join(self.base_path,f'{init_time.date()}_{init_time.hour}_{init_time.minute}.mkv'), 
                 fourcc, 
                 self.fps, 
-                (monitor['width'], monitor['height']))
+                (all_monitors['width'], all_monitors['height']))
 
        
             while datetime.now() < end_time:
-                img = np.array(sct.grab(monitor))
+                img = np.array(sct.grab(all_monitors))
                 frame = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
                 out.write(frame)
 
