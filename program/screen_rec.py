@@ -8,7 +8,7 @@ import mss
 import asyncio
 
 class ScreenRecording( Service ):
-    def __init__(self, base_dir='rec', fps=30, time_lapse=15, elderness=7):
+    def __init__(self, base_dir='rec', fps=20, time_lapse=15, elderness=7):
         '''
         args:
             base_dir: Base directory for input or ouput files
